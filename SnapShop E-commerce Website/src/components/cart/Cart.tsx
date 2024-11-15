@@ -13,11 +13,13 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = () => {
-  const { cart } = useContext(GlobalContext);
+  const { cart } = useContext(GlobalContext) ?? {
+    cart: [],
+  };
   console.log("cart: ", cart);
   // Calculate the total amount based on items in the cart
   const totalAmount = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.price * (item.quantity || 0),
     0
   );
 

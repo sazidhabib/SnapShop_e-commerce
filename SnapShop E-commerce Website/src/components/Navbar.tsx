@@ -12,10 +12,13 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const { isLogin, cart } = useContext(GlobalContext);
+  // Use optional chaining to handle potentially undefined context
+  const { cart } = useContext(GlobalContext) ?? {
+    cart: [],
+  };
 
   const totalItemNumber = cart.reduce(
-    (total, item) => total + item.quantity,
+    (total, item) => total + (item.quantity || 0),
     0
   );
 

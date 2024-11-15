@@ -27,7 +27,7 @@ const AppReducer = (state: State, action: Action): State => {
         ...state,
         cart: state.cart.map((product) =>
           product.id === action.payload.id
-            ? { ...product, quantity: product.quantity + 1 }
+            ? { ...product, quantity: (product.quantity ?? 0) + 1 }
             : product
         ),
       };
@@ -37,10 +37,10 @@ const AppReducer = (state: State, action: Action): State => {
         cart: state.cart
           .map((product) =>
             product.id === action.payload.id
-              ? { ...product, quantity: product.quantity - 1 }
+              ? { ...product, quantity: (product.quantity ?? 0) - 1 }
               : product
           )
-          .filter((product) => product.quantity > 0),
+          .filter((product) => (product.quantity ?? 0) > 0),
       };
     case "MOVE_TO_WISHLIST":
       return {

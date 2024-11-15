@@ -14,6 +14,7 @@ export interface User {
   firstName: string;
   lastName: string;
   phone: string;
+  address?: string;
 }
 
 export interface State {

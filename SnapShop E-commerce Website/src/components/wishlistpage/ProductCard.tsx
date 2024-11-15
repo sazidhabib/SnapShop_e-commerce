@@ -1,6 +1,7 @@
 import React from "react";
 
 type ProductCardProps = {
+  id: string;
   image: string;
   title: string;
   price: string;

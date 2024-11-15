@@ -4,7 +4,9 @@ import AccountManagement from "./AccountManagement";
 import ProfileEdit from "./ProfileEdit";
 
 const AccountPage: React.FC = () => {
-  const { user } = useContext(GlobalContext);
+  const { user } = useContext(GlobalContext) ?? {
+    user: undefined,
+  };
 
   return (
     <div className="flex flex-col bg-white">

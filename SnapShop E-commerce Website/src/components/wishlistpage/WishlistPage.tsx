@@ -1,43 +1,50 @@
 import React, { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import ProductCard from "./ProductCard";
+import { Product } from "../../context/types";
 
 const WishlistPage: React.FC = () => {
-  const { wishlist } = useContext(GlobalContext);
+  const { wishlist } = useContext(GlobalContext) ?? {
+    wishlist: [],
+  };
 
   const justForYouItems = [
     {
+      id: 1,
       image:
         "https://cdn.builder.io/api/v1/image/assets/TEMP/bb44ca87fca38b27f10b8a899bc34eaeaf54123a82dc3023078ae6687a63a1a2?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
       title: "ASUS FHD Gaming Laptop",
-      price: "$960",
+      price: 960,
       originalPrice: "$1160",
       discount: "-35%",
       rating: 5,
       reviews: 65,
     },
     {
+      id: 2,
       image:
         "https://cdn.builder.io/api/v1/image/assets/TEMP/38fb1b7c0b0c5bfee5f9ee5cae45ee04b50a3a5cfbcf29cc559cdeb284a2057a?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
       title: "IPS LCD Gaming Monitor",
-      price: "$1160",
+      price: 1160,
       rating: 5,
       reviews: 65,
     },
     {
+      id: 3,
       image:
         "https://cdn.builder.io/api/v1/image/assets/TEMP/e93ad05ae04f0b54f4159cbcf6911a27cb651cbe215adedef39517dbfe9650fd?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
       title: "HAVIT HV-G92 Gamepad",
-      price: "$560",
+      price: 560,
       isNew: true,
       rating: 5,
       reviews: 65,
     },
     {
+      id: 4,
       image:
         "https://cdn.builder.io/api/v1/image/assets/TEMP/894eec9e8d60eee4f3c00e3415a295bffbe214c139b91ff832ad88185ddcdbe2?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
       title: "AK-900 Wired Keyboard",
-      price: "$200",
+      price: 200,
       rating: 5,
       reviews: 65,
     },
@@ -56,9 +63,16 @@ const WishlistPage: React.FC = () => {
             </button>
           </div>
           <div className="flex flex-wrap justify-around gap-8 items-start mt-16 max-md:mt-10 max-md:max-w-full">
-            {wishlist.map((item) => (
-              <ProductCard key={item.id} {...item} />
+            {wishlist.map((item: Product) => (
+              <ProductCard
+                key={item.id}
+                id={item.id.toString()}
+                image={item.image || "default-image-url.jpg"}
+                title={item.title}
+                price={item.price.toString()} // Convert 'price' to string
+              />
             ))}
+
             {wishlist.length === 0 && (
               <p>
                 There is no product in WishList. Please add products to
@@ -82,7 +96,17 @@ const WishlistPage: React.FC = () => {
           </div>
           <div className="flex flex-wrap justify-around gap-8 items-start mt-16 max-md:mt-10 max-md:max-w-full">
             {justForYouItems.map((item, index) => (
-              <ProductCard key={index} {...item} />
+              <ProductCard
+                key={index}
+                id={item.id.toString()} // Ensure 'id' is included and converted to string
+                image={item.image}
+                title={item.title}
+                price={item.price.toString()} // Convert 'price' to string
+                originalPrice={item.originalPrice}
+                discount={item.discount}
+                rating={item.rating}
+                reviews={item.reviews}
+              />
             ))}
           </div>
         </section>

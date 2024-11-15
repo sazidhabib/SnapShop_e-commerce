@@ -9,7 +9,9 @@ interface ProtectedRouteProps {
 
 // ProtectedRoute component
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isLogin } = useContext(GlobalContext);
+  const { isLogin } = useContext(GlobalContext) ?? {
+    isLogin: false,
+  };
 
   // Redirect to the login page if not authenticated
   if (!isLogin) {

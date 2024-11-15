@@ -1,12 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Product } from "../../context/types";
 import { GlobalContext } from "../../context/GlobalContext";
 
 interface CartItemProps {
-  image: string;
+  id: number;
   title: string;
   price: number;
-  product?: Product;
+  image?: string; // Allow image to be undefined
+  quantity?: number;
+  product: Product;
 }
 
 const CartItem: React.FC<CartItemProps> = ({
@@ -15,7 +17,10 @@ const CartItem: React.FC<CartItemProps> = ({
   price,
   product,
 }) => {
-  const { increaseQuantity, decreaseQuantity } = useContext(GlobalContext);
+  const { increaseQuantity, decreaseQuantity } = useContext(GlobalContext) ?? {
+    increaseQuantity: () => {},
+    decreaseQuantity: () => {},
+  };
   // const incrementQuantity = () => setQuantity((prev) => prev + 1);
   // const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));
   return (
@@ -52,7 +57,7 @@ const CartItem: React.FC<CartItemProps> = ({
               </button>
             </div>
             <div className="self-stretch my-auto">
-              ${price * product?.quantity}
+              ${price * (product?.quantity ?? 1)}
             </div>
           </div>
         </div>

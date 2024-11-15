@@ -41,7 +41,7 @@ const App: React.FC = () => {
           path="/cart"
           element={
             <ProtectedRoute>
-              <Cart />
+              <Cart id={0} image={""} name={""} price={0} quantity={0} />
             </ProtectedRoute>
           }
         />

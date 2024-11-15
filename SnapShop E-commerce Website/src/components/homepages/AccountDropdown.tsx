@@ -7,7 +7,9 @@ interface AccountDropdownProps {
 }
 
 const AccountDropdown: React.FC<AccountDropdownProps> = ({ closeDropdown }) => {
-  const { setLogin } = useContext(GlobalContext);
+  const { setLogin } = useContext(GlobalContext) ?? {
+    setLogin: () => {},
+  };
 
   const handelLogOut = (e: React.MouseEvent) => {
     e.preventDefault();

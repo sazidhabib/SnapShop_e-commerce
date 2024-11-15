@@ -7,7 +7,9 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const { setLogin } = useContext(GlobalContext);
+  const { setLogin } = useContext(GlobalContext) ?? {
+    setLogin: () => {},
+  };
 
   const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +31,7 @@ const LoginForm: React.FC = () => {
           firstName: user.name.firstname,
           lastName: user.name.lastname,
           address: user.address.city,
+          phone: user.phone, // Add 'phone' property here
         });
         navigate("/"); // Redirect to homepage
       } else {

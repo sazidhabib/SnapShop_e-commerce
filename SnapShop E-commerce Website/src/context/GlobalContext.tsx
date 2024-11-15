@@ -4,6 +4,7 @@ import { State, User, Product } from "./types";
 
 // Initial state
 const initialState: State = {
+  isLogin: false,
   wishlist: localStorage.getItem("wishlist")
     ? JSON.parse(localStorage.getItem("wishlist") as string)
     : [],

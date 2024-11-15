@@ -16,6 +16,8 @@ type ProductCardProps = {
   isNew?: boolean;
   rating?: number;
   reviews?: number;
+  isLoggedIn: boolean; // Add this property
+  quantity?: number; // Add this property
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -26,12 +28,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
   originalPrice,
   discount,
   isNew,
-  rating,
-  reviews,
+  rating = 0,
+  reviews = 0,
 }) => {
-  const { addToWishlist, wishlist, addToCart, cart, isLogin } =
-    useContext(GlobalContext);
-  console.log("sazid", wishlist);
+  const {
+    addToWishlist = () => {},
+    wishlist = [],
+    addToCart = () => {},
+    cart = [],
+    isLogin = false,
+  } = useContext(GlobalContext) ?? {};
 
   const [showLoginPrompt, setShowLoginPrompt] = useState(false); // State for modal
 

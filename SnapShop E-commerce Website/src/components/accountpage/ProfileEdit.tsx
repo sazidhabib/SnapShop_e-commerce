@@ -2,7 +2,9 @@ import React, { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 
 const ProfileEdit: React.FC = () => {
-  const { user } = useContext(GlobalContext);
+  const { user } = useContext(GlobalContext) ?? {
+    user: undefined,
+  };
   console.log("LoginUser: ", user);
 
   return (
