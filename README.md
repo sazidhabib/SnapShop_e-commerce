@@ -2,6 +2,8 @@
 
 This is a responsive e-commerce platform built with **TypeScript**, **React**, and **Tailwind CSS**. It features product management, user authentication, and user-specific functionalities such as a wishlist and shopping cart.
 
+Live demo - https://sazidsnapshop.netlify.app/
+
 ## Features
 - **Responsive UI**: Seamless experience on all devices.
 - **Product Management**: Display, cart, and wishlist management.
