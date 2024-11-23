@@ -131,9 +131,11 @@ This project is distributed under the MIT License. See the `LICENSE` file in the
 ## Demo
 ![home](https://github.com/user-attachments/assets/58e724d7-7f33-41a9-9a94-64c4ddd7bbc0)
 ![shop](https://github.com/user-attachments/assets/73b59779-22c2-45fa-bdd5-50761663d248)
+![productDetail](https://github.com/user-attachments/assets/923f826d-b69f-4ede-ab11-bbb301298491)
 ![wishList](https://github.com/user-attachments/assets/ec30e94d-368a-408c-8ce0-befd3b37565a)
 ![Cart](https://github.com/user-attachments/assets/db682adc-a190-43a7-8cc6-249b4c232f60)
 ![userinformation](https://github.com/user-attachments/assets/17b4ea11-e2eb-4c65-bd4e-bc5c7ba5954f)
+
 
 
 
