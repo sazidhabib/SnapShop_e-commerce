@@ -71,6 +71,14 @@ To preview the production build locally, use the following command:
 - **Using yarn**:
   ```bash
   yarn preview
+## Login details
+- **User name & password**:
+  ```bash
+   1. username: johnd
+      password: m38rmF$
+   2. username: kevinryan
+      password: kev02937@
+  More username and password in this Api - https://fakestoreapi.com/users
 
 ## Project Structure
 
