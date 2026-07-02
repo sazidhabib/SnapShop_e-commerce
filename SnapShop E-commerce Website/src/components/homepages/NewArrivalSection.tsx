@@ -16,9 +16,9 @@ const NewArrivalSection: React.FC = () => {
           New Arrival
         </h3>
       </div>
-      <div className="flex flex-wrap gap-8 items-start mt-16 max-md:mt-10 max-md:max-w-full mx-auto md:px-6 lg:px-8 max-md:mt-10">
-        <div className="flex overflow-hidden flex-col px-7 pt-24 bg-black rounded min-w-[240px] w-[570px] max-md:px-5 max-md:max-w-full">
-          <div className="flex relative flex-col items-start px-1 pt-96 pb-8 min-h-[511px] max-md:pt-24 max-md:pr-5 max-md:max-w-full">
+      <div className="flex flex-wrap lg:flex-nowrap gap-[30px] justify-center items-stretch mt-16 max-md:mt-10 max-md:max-w-full mx-auto md:px-6 lg:px-8">
+        <div className="flex overflow-hidden flex-col px-7 pt-24 bg-black rounded w-full lg:w-[570px] shrink-0 max-md:px-5 max-md:max-w-full">
+          <div className="flex relative flex-col items-start px-1 pt-96 pb-8 min-h-[511px] max-md:pt-24 max-md:pr-5 max-md:max-w-full h-full justify-end">
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/257c68e85d4ec211145a399b858c738793ae6303cc07c44213626b752e7a758b?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
@@ -49,9 +49,9 @@ const NewArrivalSection: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-center min-w-[240px] w-[570px] max-md:max-w-full">
-          <div className="flex overflow-hidden flex-col items-end px-14 max-w-full rounded bg-stone-950 w-[570px] max-md:pl-5">
-            <div className="flex relative flex-col items-start pt-36 pb-6 w-full min-h-[284px] max-md:pt-24 max-md:pr-5">
+        <div className="flex flex-col justify-between items-center w-full lg:w-[570px] max-md:max-w-full gap-8">
+          <div className="flex overflow-hidden flex-col items-end px-14 max-w-full rounded bg-stone-950 w-full max-md:pl-5">
+            <div className="flex relative flex-col items-start pt-36 pb-6 w-full min-h-[284px] max-md:pt-24 max-md:pr-5 h-full justify-end">
               <img
                 loading="lazy"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/1b674d8f28601fdf2204e3778d077b479839f481c73ef779cd6a3e8ad34a517e?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
@@ -82,17 +82,17 @@ const NewArrivalSection: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-wrap gap-8 justify-center items-center mt-8 max-md:max-w-full">
+          <div className="flex flex-wrap sm:flex-nowrap gap-[30px] justify-between items-center w-full max-md:max-w-full">
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/16dde121b17351442b2a0c030d0bf38473187951e42801cd7ab240919bb600a7?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-              className="object-contain self-stretch my-auto aspect-[0.95] min-w-[240px] w-[270px]"
+              className="object-contain self-stretch my-auto aspect-[0.95] w-full sm:w-[270px] rounded"
               alt="Speakers"
             />
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/a8dd2255c7c4f3d308e86cd70c570db08a89b1a05cd520223105648ebc43962d?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-              className="object-contain self-stretch my-auto aspect-[0.95] min-w-[240px] w-[270px]"
+              className="object-contain self-stretch my-auto aspect-[0.95] w-full sm:w-[270px] rounded"
               alt="Perfume"
             />
           </div>
