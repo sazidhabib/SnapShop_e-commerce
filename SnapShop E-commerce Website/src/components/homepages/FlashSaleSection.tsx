@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 
 interface FlashSaleProduct {
@@ -12,7 +12,95 @@ interface FlashSaleProduct {
 }
 
 const FlashSaleSection: React.FC = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = 300;
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const [timeLeft, setTimeLeft] = useState({
+    days: 3,
+    hours: 23,
+    minutes: 19,
+    seconds: 56,
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        let { days, hours, minutes, seconds } = prev;
+        seconds--;
+        if (seconds < 0) {
+          seconds = 59;
+          minutes--;
+          if (minutes < 0) {
+            minutes = 59;
+            hours--;
+            if (hours < 0) {
+              hours = 23;
+              days--;
+              if (days < 0) {
+                clearInterval(timer);
+                return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+              }
+            }
+          }
+        }
+        return { days, hours, minutes, seconds };
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const pad = (n: number) => n.toString().padStart(2, "0");
+
   const flashSaleProducts: FlashSaleProduct[] = [
+    {
+      image:
+        "https://cdn.builder.io/api/v1/image/assets/TEMP/e93ad05ae04f0b54f4159cbcf6911a27cb651cbe215adedef39517dbfe9650fd?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
+      name: "HAVIT HV-G92 Gamepad",
+      price: "$120",
+      originalPrice: "$160",
+      rating: 5,
+      reviews: 88,
+      discount: "-40%",
+    },
+    {
+      image:
+        "https://cdn.builder.io/api/v1/image/assets/TEMP/9170071e3daa89b6799f0d14f0342b75a9776f989a852592d8f39e9178cf47ff?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
+      name: "AK-900 Wired Keyboard",
+      price: "$960",
+      originalPrice: "$1160",
+      rating: 4,
+      reviews: 75,
+      discount: "-35%",
+    },
+    {
+      image:
+        "https://cdn.builder.io/api/v1/image/assets/TEMP/38fb1b7c0b0c5bfee5f9ee5cae45ee04b50a3a5cfbcf29cc559cdeb284a2057a?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
+      name: "IPS LCD Gaming Monitor",
+      price: "$370",
+      originalPrice: "$400",
+      rating: 5,
+      reviews: 99,
+      discount: "-30%",
+    },
+    {
+      image:
+        "https://cdn.builder.io/api/v1/image/assets/TEMP/0e3fa4e823535c56b66e939b98c8a904352198ab013849f3cad68fd370f6bcda?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
+      name: "S-Series Comfort Chair",
+      price: "$375",
+      originalPrice: "$400",
+      rating: 4,
+      reviews: 99,
+      discount: "-25%",
+    },
     {
       image:
         "https://cdn.builder.io/api/v1/image/assets/TEMP/e93ad05ae04f0b54f4159cbcf6911a27cb651cbe215adedef39517dbfe9650fd?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
@@ -74,19 +162,19 @@ const FlashSaleSection: React.FC = () => {
                 <div className="text-xs font-medium">{unit}</div>
                 <div className="text-2xl font-bold mt-1 md:text-3xl">
                   {index === 0
-                    ? "03"
+                    ? pad(timeLeft.days)
                     : index === 1
-                    ? "23"
-                    : index === 2
-                    ? "19"
-                    : "56"}
+                      ? pad(timeLeft.hours)
+                      : index === 2
+                        ? pad(timeLeft.minutes)
+                        : pad(timeLeft.seconds)}
                 </div>
               </div>
             ))}
           </div>
         </div>
         <div className="flex gap-2 mt-4">
-          <button aria-label="Previous" className="focus:outline-none">
+          <button aria-label="Previous" onClick={() => scroll("left")} className="focus:outline-none">
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/6d46c131187bfff9eb633481579a064341b51d7196040ee40dd3f9577e445a5e?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
@@ -94,7 +182,7 @@ const FlashSaleSection: React.FC = () => {
               alt=""
             />
           </button>
-          <button aria-label="Next" className="focus:outline-none">
+          <button aria-label="Next" onClick={() => scroll("right")} className="focus:outline-none">
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/e88e31fcac886e936832d43b7fb2b7a3e219274da66d8e9d07a08a6cc7094c1b?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
@@ -104,7 +192,7 @@ const FlashSaleSection: React.FC = () => {
           </button>
         </div>
       </div>
-      <div className="flex overflow-x-auto gap-4 mt-6 pb-4 md:gap-6 md:mt-8 lg:gap-8 lg:mt-10">
+      <div ref={scrollRef} className="flex overflow-x-auto scrollbar-hide gap-4 mt-6 pb-4 md:gap-6 md:mt-8 lg:gap-8 lg:mt-10">
         {flashSaleProducts.map((product, index) => (
           <div
             key={index}

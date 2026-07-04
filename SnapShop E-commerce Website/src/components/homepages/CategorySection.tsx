@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useRef } from "react";
 import CategoryCard from "./CategoryCard";
 
 const CategorySection: React.FC = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = 300;
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   const categories = [
     {
       name: "Phones",
@@ -43,14 +55,14 @@ const CategorySection: React.FC = () => {
           </h3>
         </div>
         <div className="flex gap-2">
-          <button aria-label="Previous category" className="focus:outline-none">
+          <button aria-label="Previous category" onClick={() => scroll("left")} className="focus:outline-none">
             <img
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/6d46c131187bfff9eb633481579a064341b51d7196040ee40dd3f9577e445a5e?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
               className="w-10 md:w-12"
               alt=""
             />
           </button>
-          <button aria-label="Next category" className="focus:outline-none">
+          <button aria-label="Next category" onClick={() => scroll("right")} className="focus:outline-none">
             <img
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/e88e31fcac886e936832d43b7fb2b7a3e219274da66d8e9d07a08a6cc7094c1b?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
               className="w-10 md:w-12"
@@ -59,7 +71,7 @@ const CategorySection: React.FC = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-wrap gap-4 mt-10 max-w-[1280px] w-full justify-center">
+      <div ref={scrollRef} className="flex overflow-x-auto scrollbar-hide gap-4 mt-10 max-w-[1280px] w-full">
         {categories.map((category, index) => (
           <div
             key={index}

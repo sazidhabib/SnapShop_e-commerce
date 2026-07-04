@@ -7,14 +7,16 @@ import { FaTimes } from "react-icons/fa";
 import { FaUserCircle } from "react-icons/fa";
 import SearchComponent from "./homepages/SearchComponent";
 import AccountDropdown from "./homepages/AccountDropdown";
+import LogoutDropdown from "./homepages/LogoutDropdown";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Use optional chaining to handle potentially undefined context
-  const { cart } = useContext(GlobalContext) ?? {
+  const { cart, isLogin } = useContext(GlobalContext) ?? {
     cart: [],
+    isLogin: false,
   };
 
   const totalItemNumber = cart.reduce(
@@ -129,7 +131,11 @@ const Navbar: React.FC = () => {
         </div>
         {isDropdownOpen && (
           <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-md shadow-lg z-20">
-            <AccountDropdown closeDropdown={() => setIsDropdownOpen(false)} />
+            {isLogin ? (
+              <AccountDropdown closeDropdown={() => setIsDropdownOpen(false)} />
+            ) : (
+              <LogoutDropdown closeDropdown={() => setIsDropdownOpen(false)} />
+            )}
           </div>
         )}
 

@@ -61,17 +61,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="flex gap-2 items-start mt-2 text-sm font-semibold text-black whitespace-nowrap">
           <div className="flex">
             {[...Array(5)].map((_, i) => (
-              <img
+              <svg
                 key={i}
-                loading="lazy"
-                src={
-                  i < rating
-                    ? "https://cdn.builder.io/api/v1/image/assets/TEMP/f79bd71a6471f38d5d1fc5e45c151fa99346fc4a5342fd2b25d87f1e68ade395?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-                    : "https://cdn.builder.io/api/v1/image/assets/TEMP/dc96f02be6214aa2c5a10a5e290e5d7f143f389e81e1b093a9c0c4f46c5eb8a8?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-                }
-                className="object-contain shrink-0 w-5 h-5"
-                alt=""
-              />
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill={i < rating ? "currentColor" : "none"}
+                stroke="currentColor"
+                strokeWidth={i < rating ? "0" : "1.5"}
+                className={`w-5 h-5 ${i < rating ? "text-yellow-400" : "text-gray-300"}`}
+              >
+                <path d="M12 .587l3.668 7.429 8.2 1.192-5.935 5.784 1.4 8.165L12 18.896l-7.333 3.861 1.4-8.165L.132 9.208l8.2-1.192L12 .587z" />
+              </svg>
             ))}
           </div>
           <span className="w-8 opacity-50">({reviews})</span>
