@@ -29,8 +29,8 @@ const ProductsPage: React.FC = () => {
         throw new Error("Could not fetch remote products");
       }
 
-      const data = await response.json();
-      const transformedProduct: Product[] = data.map((p: any) => ({
+      const data: ApiProduct[] = await response.json();
+      const transformedProduct: Product[] = data.map((p) => ({
         id: p.id,
         image: p.image,
         title: p.title,

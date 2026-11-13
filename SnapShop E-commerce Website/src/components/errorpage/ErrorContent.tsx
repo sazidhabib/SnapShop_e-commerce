@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const ErrorContent: React.FC = () => {
   return (
@@ -8,13 +8,14 @@ const ErrorContent: React.FC = () => {
         data-layername="roadmap"
         className="flex gap-3 items-center self-start text-sm text-black"
       >
-        <a
+        <Link
           href="/"
           data-layername="account"
-          className="self-stretch my-auto opacity-50"
+          className="self-stretch my-auto opacity-50 hover:opacity-100 transition-opacity"
         >
           Home
-        </a>
+        </Link>
+        <span className="self-stretch my-auto opacity-50">/</span>
         <span data-layername="nothing" className="self-stretch my-auto">
           404 Error
         </span>
@@ -34,9 +35,9 @@ const ErrorContent: React.FC = () => {
         </p>
       </section>
       <Link
-        to="/"
+        href="/"
         data-layername="button"
-        className="gap-2.5 self-center px-12 py-4 mt-20 ml-16 text-base font-medium bg-red-500 rounded text-neutral-50 max-md:px-5 max-md:mt-10"
+        className="gap-2.5 self-center px-12 py-4 mt-20 text-base font-medium bg-red-500 hover:bg-red-600 transition-colors rounded text-neutral-50 max-md:px-5 max-md:mt-10"
       >
         Back to home page
       </Link>

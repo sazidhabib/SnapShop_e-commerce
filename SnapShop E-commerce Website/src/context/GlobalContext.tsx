@@ -53,7 +53,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
         if (storedWishlist && storedWishlist !== "undefined" && storedWishlist !== "null") {
           try {
             wishlist = JSON.parse(storedWishlist);
-          } catch (e) {
+          } catch {
             wishlist = [];
           }
         }
@@ -62,7 +62,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
         if (storedCart && storedCart !== "undefined" && storedCart !== "null") {
           try {
             cart = JSON.parse(storedCart);
-          } catch (e) {
+          } catch {
             cart = [];
           }
         }
@@ -71,7 +71,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
         if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
           try {
             user = JSON.parse(storedUser);
-          } catch (e) {
+          } catch {
             user = undefined;
           }
         }

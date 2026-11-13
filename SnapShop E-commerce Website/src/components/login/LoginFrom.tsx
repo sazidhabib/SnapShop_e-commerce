@@ -66,10 +66,10 @@ const LoginForm: React.FC = () => {
         if (response.ok) {
           const users = await response.json();
           matchedUser = users.find(
-            (u: any) => u.username === cleanUsername && u.password === password
+            (u: { username?: string; password?: string }) => u.username === cleanUsername && u.password === password
           );
         }
-      } catch (netErr) {
+      } catch {
         // Network timeout / offline fallback
       }
 

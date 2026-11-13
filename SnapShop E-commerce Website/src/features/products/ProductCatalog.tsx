@@ -77,7 +77,7 @@ export default function ProductCatalog({
           {/* Sort Dropdown */}
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
+            onChange={(e) => setSortBy(e.target.value as "featured" | "price-asc" | "price-desc" | "rating")}
             className="px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white focus:outline-none focus:ring-1 focus:ring-black"
           >
             <option value="featured">Sort by: Featured</option>
