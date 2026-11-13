@@ -1,82 +1,69 @@
+"use client";
+
 import React, { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import { FiUser, FiPackage } from "react-icons/fi";
+import { TbLogout } from "react-icons/tb";
 
 interface AccountDropdownProps {
   closeDropdown: () => void;
 }
 
 const AccountDropdown: React.FC<AccountDropdownProps> = ({ closeDropdown }) => {
-  const { setLogin } = useContext(GlobalContext) ?? {
+  const { setLogin, user } = useContext(GlobalContext) ?? {
     setLogin: () => {},
   };
 
-  const handelLogOut = (e: React.MouseEvent) => {
+  const handleLogOut = (e: React.MouseEvent) => {
     e.preventDefault();
-    setLogin(false);
+    setLogin(false, undefined);
     closeDropdown();
   };
 
+  const displayName = user
+    ? `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.username
+    : "Shopper";
+
   return (
-    <div className="flex overflow-hidden z-10 flex-col self-end px-3 pt-5 pb-2.5 mt-0 w-56 max-w-full text-sm text-center rounded bg-cyan-950 text-neutral-50">
-      <nav className="flex flex-col items-start">
+    <div className="flex overflow-hidden z-50 flex-col p-2 rounded-xl bg-gray-950 text-neutral-100 shadow-2xl border border-gray-800 min-w-[220px] animate-in fade-in-50 zoom-in-95 duration-150">
+      {/* User Info Header */}
+      <div className="px-3 py-2.5 border-b border-gray-800/80 mb-1">
+        <p className="text-xs text-gray-400 font-medium">Signed in as</p>
+        <p className="text-sm font-semibold text-white truncate">{displayName}</p>
+        {user?.email && (
+          <p className="text-[11px] text-gray-400 truncate mt-0.5">{user.email}</p>
+        )}
+      </div>
+
+      <nav className="flex flex-col space-y-1">
         <Link
           onClick={closeDropdown}
-          to="/profile"
-          className="flex gap-4 items-center"
+          href="/profile"
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-200 hover:text-white hover:bg-gray-800/70 transition-all text-left"
         >
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d4d3933bd60bc7f03e80195cff61581a8fb5573107350371a713dbfa0482821b?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-            alt=""
-            className="object-contain shrink-0 self-stretch my-auto w-8 aspect-square"
-          />
-          <span className="self-stretch my-auto">Manage My Account</span>
+          <FiUser className="w-4 h-4 text-gray-400 shrink-0" />
+          <span>Manage My Account</span>
         </Link>
-        <a href="#" className="flex gap-4 items-center mt-3.5">
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/c153124546cb6b9efef3168c24f225bca3a8a8f898ad639ac1f78f897b410b20?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-            alt=""
-            className="object-contain shrink-0 self-stretch my-auto w-6 aspect-square"
-          />
-          <span className="self-stretch my-auto">My Order</span>
-        </a>
-        <a href="#" className="flex gap-4 items-center mt-3.5">
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/b0d73c945483150020ad3e75cd5079429cf53a005a69a364be947fb8fca587e1?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-            alt=""
-            className="object-contain shrink-0 self-stretch my-auto w-6 aspect-square"
-          />
-          <span className="self-stretch my-auto">My Cancellations</span>
-        </a>
+
         <Link
           onClick={closeDropdown}
-          to="/signup"
-          className="flex gap-4 items-center mt-3.5"
+          href="/profile"
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-200 hover:text-white hover:bg-gray-800/70 transition-all text-left"
         >
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/943c84ae3047cf3e3844a45ef6f5c62cb367d6032aaa74048785a1d185e49909?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-            alt=""
-            className="object-contain shrink-0 self-stretch my-auto w-6 aspect-square"
-          />
-          <span className="self-stretch my-auto">SignUp</span>
+          <FiPackage className="w-4 h-4 text-gray-400 shrink-0" />
+          <span>My Orders</span>
         </Link>
-        <Link
-          onClick={handelLogOut}
-          to="/login"
-          className="flex gap-4 items-center mt-3.5 whitespace-nowrap"
-        >
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/5dd4ef2221a26eb97c44021b855f72d1aa05086d707c891b3a9c34b08b015240?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-            alt=""
-            className="object-contain shrink-0 self-stretch my-auto w-6 aspect-square"
-          />
-          <span className="self-stretch my-auto">Logout</span>
-        </Link>
+
+        <div className="pt-1 mt-1 border-t border-gray-800/80">
+          <button
+            onClick={handleLogOut}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all text-left"
+          >
+            <TbLogout className="w-4 h-4 text-red-400 shrink-0" />
+            <span className="font-medium">Logout</span>
+          </button>
+        </div>
       </nav>
     </div>
   );

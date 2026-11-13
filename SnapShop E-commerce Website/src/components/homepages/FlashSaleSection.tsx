@@ -1,17 +1,15 @@
-import React, { useRef, useState, useEffect } from "react";
-import ProductCard from "./ProductCard";
+"use client";
 
-interface FlashSaleProduct {
-  image: string;
-  name: string;
-  price: string;
-  originalPrice: string;
-  rating: number;
-  reviews: number;
-  discount: string;
+import React, { useRef, useState, useEffect } from "react";
+import ProductCard from "../productlist/ProductCard";
+import { ApiProduct, FALLBACK_PRODUCTS } from "@/lib/api";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+
+interface FlashSaleSectionProps {
+  products?: ApiProduct[];
 }
 
-const FlashSaleSection: React.FC = () => {
+const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({ products }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -60,147 +58,104 @@ const FlashSaleSection: React.FC = () => {
 
   const pad = (n: number) => n.toString().padStart(2, "0");
 
-  const flashSaleProducts: FlashSaleProduct[] = [
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/e93ad05ae04f0b54f4159cbcf6911a27cb651cbe215adedef39517dbfe9650fd?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
-      name: "HAVIT HV-G92 Gamepad",
-      price: "$120",
-      originalPrice: "$160",
-      rating: 5,
-      reviews: 88,
-      discount: "-40%",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/9170071e3daa89b6799f0d14f0342b75a9776f989a852592d8f39e9178cf47ff?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
-      name: "AK-900 Wired Keyboard",
-      price: "$960",
-      originalPrice: "$1160",
-      rating: 4,
-      reviews: 75,
-      discount: "-35%",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/38fb1b7c0b0c5bfee5f9ee5cae45ee04b50a3a5cfbcf29cc559cdeb284a2057a?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
-      name: "IPS LCD Gaming Monitor",
-      price: "$370",
-      originalPrice: "$400",
-      rating: 5,
-      reviews: 99,
-      discount: "-30%",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/0e3fa4e823535c56b66e939b98c8a904352198ab013849f3cad68fd370f6bcda?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
-      name: "S-Series Comfort Chair",
-      price: "$375",
-      originalPrice: "$400",
-      rating: 4,
-      reviews: 99,
-      discount: "-25%",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/e93ad05ae04f0b54f4159cbcf6911a27cb651cbe215adedef39517dbfe9650fd?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
-      name: "HAVIT HV-G92 Gamepad",
-      price: "$120",
-      originalPrice: "$160",
-      rating: 5,
-      reviews: 88,
-      discount: "-40%",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/9170071e3daa89b6799f0d14f0342b75a9776f989a852592d8f39e9178cf47ff?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
-      name: "AK-900 Wired Keyboard",
-      price: "$960",
-      originalPrice: "$1160",
-      rating: 4,
-      reviews: 75,
-      discount: "-35%",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/38fb1b7c0b0c5bfee5f9ee5cae45ee04b50a3a5cfbcf29cc559cdeb284a2057a?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
-      name: "IPS LCD Gaming Monitor",
-      price: "$370",
-      originalPrice: "$400",
-      rating: 5,
-      reviews: 99,
-      discount: "-30%",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/0e3fa4e823535c56b66e939b98c8a904352198ab013849f3cad68fd370f6bcda?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef",
-      name: "S-Series Comfort Chair",
-      price: "$375",
-      originalPrice: "$400",
-      rating: 4,
-      reviews: 99,
-      discount: "-25%",
-    },
-  ];
+  const discounts = ["-40%", "-35%", "-30%", "-25%", "-20%"];
+  const rawProducts = products && products.length > 0 ? products : FALLBACK_PRODUCTS;
+  const flashSaleItems = rawProducts.slice(0, 8);
 
   return (
-    <section className="flex flex-col self-center mt-36 w-full px-4 mx-auto md:px-6 lg:px-8">
-      <div className="flex flex-wrap gap-6 items-end max-w-full justify-between">
-        <div className="flex flex-col min-w-[240px] md:min-w-[280px]">
-          <div className="flex flex-col h-[103px]">
-            <div className="flex gap-2 items-center">
-              <div className="h-10 w-5 bg-red-500 rounded"></div>
-              <h2 className="text-base font-semibold text-red-500">Today's</h2>
+    <section className="flex flex-col mt-16 md:mt-28 w-full max-w-[1170px] mx-auto px-4">
+      {/* Header with Title, Countdown & Navigation Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 w-full">
+        <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-14">
+          <div className="flex flex-col">
+            <div className="flex gap-2.5 items-center">
+              <div className="h-9 w-4 sm:h-10 sm:w-5 bg-red-500 rounded"></div>
+              <h2 className="text-sm sm:text-base font-semibold text-red-500">Today's</h2>
             </div>
-            <h3 className="mt-4 text-2xl font-semibold text-black md:text-3xl lg:text-4xl">
+            <h3 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-black">
               Flash Sales
             </h3>
           </div>
-          <div className="flex gap-4 text-black mt-4">
-            {["Days", "Hours", "Minutes", "Seconds"].map((unit, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <div className="text-xs font-medium">{unit}</div>
-                <div className="text-2xl font-bold mt-1 md:text-3xl">
-                  {index === 0
-                    ? pad(timeLeft.days)
-                    : index === 1
-                      ? pad(timeLeft.hours)
-                      : index === 2
-                        ? pad(timeLeft.minutes)
-                        : pad(timeLeft.seconds)}
-                </div>
-              </div>
-            ))}
+
+          {/* Countdown Clock */}
+          <div className="flex items-center gap-2 sm:gap-3 text-black">
+            <div className="flex flex-col items-center">
+              <span className="text-[10px] sm:text-xs font-semibold text-gray-500">Days</span>
+              <span className="text-xl sm:text-3xl font-extrabold tracking-tight mt-0.5">
+                {pad(timeLeft.days)}
+              </span>
+            </div>
+            <span className="text-red-500 font-bold text-lg sm:text-2xl mt-3">:</span>
+            <div className="flex flex-col items-center">
+              <span className="text-[10px] sm:text-xs font-semibold text-gray-500">Hours</span>
+              <span className="text-xl sm:text-3xl font-extrabold tracking-tight mt-0.5">
+                {pad(timeLeft.hours)}
+              </span>
+            </div>
+            <span className="text-red-500 font-bold text-lg sm:text-2xl mt-3">:</span>
+            <div className="flex flex-col items-center">
+              <span className="text-[10px] sm:text-xs font-semibold text-gray-500">Minutes</span>
+              <span className="text-xl sm:text-3xl font-extrabold tracking-tight mt-0.5">
+                {pad(timeLeft.minutes)}
+              </span>
+            </div>
+            <span className="text-red-500 font-bold text-lg sm:text-2xl mt-3">:</span>
+            <div className="flex flex-col items-center">
+              <span className="text-[10px] sm:text-xs font-semibold text-gray-500">Seconds</span>
+              <span className="text-xl sm:text-3xl font-extrabold tracking-tight mt-0.5 text-red-500">
+                {pad(timeLeft.seconds)}
+              </span>
+            </div>
           </div>
         </div>
-        <div className="flex gap-2 mt-4">
-          <button aria-label="Previous" onClick={() => scroll("left")} className="focus:outline-none">
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/6d46c131187bfff9eb633481579a064341b51d7196040ee40dd3f9577e445a5e?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-              className="object-contain w-10 md:w-12"
-              alt=""
-            />
+
+        {/* Scroll Chevrons */}
+        <div className="flex gap-2 self-end sm:self-auto">
+          <button
+            aria-label="Previous flash sale product"
+            onClick={() => scroll("left")}
+            className="w-10 h-10 rounded-full bg-neutral-100 hover:bg-neutral-200 text-black flex items-center justify-center transition-all focus:outline-none"
+          >
+            <FiChevronLeft className="w-5 h-5" />
           </button>
-          <button aria-label="Next" onClick={() => scroll("right")} className="focus:outline-none">
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/e88e31fcac886e936832d43b7fb2b7a3e219274da66d8e9d07a08a6cc7094c1b?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-              className="object-contain w-10 md:w-12"
-              alt=""
-            />
+          <button
+            aria-label="Next flash sale product"
+            onClick={() => scroll("right")}
+            className="w-10 h-10 rounded-full bg-neutral-100 hover:bg-neutral-200 text-black flex items-center justify-center transition-all focus:outline-none"
+          >
+            <FiChevronRight className="w-5 h-5" />
           </button>
         </div>
       </div>
-      <div ref={scrollRef} className="flex overflow-x-auto scrollbar-hide gap-4 mt-6 pb-4 md:gap-6 md:mt-8 lg:gap-8 lg:mt-10">
-        {flashSaleProducts.map((product, index) => (
-          <div
-            key={index}
-            className="min-w-[220px] sm:min-w-[260px] md:min-w-[280px] lg:min-w-[300px]"
-          >
-            <ProductCard {...product} />
-          </div>
-        ))}
+
+      {/* Horizontal Product Scroller */}
+      <div
+        ref={scrollRef}
+        className="flex overflow-x-auto scrollbar-hide gap-4 sm:gap-6 mt-8 pb-4 w-full"
+      >
+        {flashSaleItems.map((product, index) => {
+          const discount = discounts[index % discounts.length];
+          const discountNum = Math.abs(parseInt(discount, 10));
+          const originalPrice = "$" + (product.price / (1 - discountNum / 100)).toFixed(2);
+
+          return (
+            <div
+              key={product.id}
+              className="min-w-[220px] sm:min-w-[250px] md:min-w-[270px] shrink-0"
+            >
+              <ProductCard
+                id={product.id}
+                image={product.image}
+                title={product.title}
+                price={product.price}
+                originalPrice={originalPrice}
+                discount={discount}
+                rating={product.rating?.rate ?? 4}
+                reviews={product.rating?.count ?? 50}
+              />
+            </div>
+          );
+        })}
       </div>
     </section>
   );

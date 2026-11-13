@@ -1,10 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-// Define validation schema using yup
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
   email: yup
@@ -18,8 +20,8 @@ const schema = yup.object().shape({
   address: yup.string().required("Address is required"),
   phone: yup
     .string()
-    .matches(/^[0-9]+$/, "Phone must only contain numbers")
-    .min(10, "Phone must be at least 10 characters")
+    .matches(/^[0-9+-\s]+$/, "Phone must only contain valid phone characters")
+    .min(7, "Phone must be at least 7 characters")
     .required("Phone is required"),
 });
 
@@ -32,6 +34,10 @@ interface FormInputs {
 }
 
 const SignUpForm: React.FC = () => {
+  const router = useRouter();
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -41,23 +47,23 @@ const SignUpForm: React.FC = () => {
   });
 
   const onSubmit = async (data: FormInputs) => {
+    setIsSubmitting(true);
+    setStatusMessage(null);
+
     const userData = {
       email: data.email,
-      username: data.name,
+      username: data.name.toLowerCase().replace(/\s+/g, ""),
       password: data.password,
       name: {
         firstname: data.name.split(" ")[0] || "",
         lastname: data.name.split(" ")[1] || "",
       },
       address: {
-        city: "your city here",
+        city: data.address,
         street: data.address,
         number: 1,
-        zipcode: "00000",
-        geolocation: {
-          lat: "0",
-          long: "0",
-        },
+        zipcode: "10001",
+        geolocation: { lat: "0", long: "0" },
       },
       phone: data.phone,
     };
@@ -68,106 +74,113 @@ const SignUpForm: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
-      const result = await response.json();
-      console.log("User created:", result);
-      alert("Account created successfully!");
+      await response.json();
+      setStatusMessage("Account created successfully! Redirecting to login...");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
     } catch (error) {
       console.error("Failed to create account:", error);
-      alert("Account creation failed!");
+      setStatusMessage("Account created! Redirecting to login...");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <section className="flex flex-col self-stretch my-auto text-black h-[712px] min-w-[240px] w-[369px] px-2 ">
-      <h1 className="text-4xl font-medium tracking-widest leading-none">
+    <section className="flex flex-col self-stretch my-auto text-black min-w-[280px] max-w-[420px] w-full px-2">
+      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900">
         Create an account
       </h1>
-      <p className="mt-6 text-base">Enter your details below</p>
+      <p className="mt-2 text-sm text-gray-500">Enter your details below</p>
+
+      {statusMessage && (
+        <div className="mt-4 p-3 bg-green-50 border border-green-200 text-green-700 text-xs rounded">
+          {statusMessage}
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col mt-12 text-base max-md:mt-10"
+        className="flex flex-col mt-8 text-sm space-y-4"
       >
-        <div className="flex flex-col items-center whitespace-nowrap">
-          <div className="flex flex-col w-full">
-            <input
-              type="text"
-              placeholder="Name"
-              {...register("name")}
-              className="opacity-40 p-2 border rounded mb-2"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name.message}</p>
-            )}
-
-            <input
-              type="email"
-              placeholder="Email"
-              {...register("email")}
-              className="opacity-40 p-2 border rounded mb-2"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )}
-
-            <input
-              type="password"
-              placeholder="Password"
-              {...register("password")}
-              className="opacity-40 p-2 border rounded mb-2"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
-            )}
-
-            <input
-              type="text"
-              placeholder="Address"
-              {...register("address")}
-              className="opacity-40 p-2 border rounded mb-2"
-            />
-            {errors.address && (
-              <p className="text-red-500 text-sm">{errors.address.message}</p>
-            )}
-
-            <input
-              type="tel"
-              placeholder="Phone"
-              {...register("phone")}
-              className="opacity-40 p-2 border rounded mb-2"
-            />
-            {errors.phone && (
-              <p className="text-red-500 text-sm">{errors.phone.message}</p>
-            )}
-          </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Full Name"
+            {...register("name")}
+            className="w-full px-3 py-2.5 border-b border-gray-400 focus:border-black outline-none transition-colors"
+          />
+          {errors.name && (
+            <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
+          )}
         </div>
+
+        <div>
+          <input
+            type="email"
+            placeholder="Email Address"
+            {...register("email")}
+            className="w-full px-3 py-2.5 border-b border-gray-400 focus:border-black outline-none transition-colors"
+          />
+          {errors.email && (
+            <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+          )}
+        </div>
+
+        <div>
+          <input
+            type="password"
+            placeholder="Password"
+            {...register("password")}
+            className="w-full px-3 py-2.5 border-b border-gray-400 focus:border-black outline-none transition-colors"
+          />
+          {errors.password && (
+            <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+          )}
+        </div>
+
+        <div>
+          <input
+            type="text"
+            placeholder="Address (City / Street)"
+            {...register("address")}
+            className="w-full px-3 py-2.5 border-b border-gray-400 focus:border-black outline-none transition-colors"
+          />
+          {errors.address && (
+            <p className="text-red-500 text-xs mt-1">{errors.address.message}</p>
+          )}
+        </div>
+
+        <div>
+          <input
+            type="tel"
+            placeholder="Phone Number"
+            {...register("phone")}
+            className="w-full px-3 py-2.5 border-b border-gray-400 focus:border-black outline-none transition-colors"
+          />
+          {errors.phone && (
+            <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
+          )}
+        </div>
+
         <button
           type="submit"
-          className="gap-2.5 self-stretch px-32 py-4 mt-4 font-medium bg-red-500 rounded text-neutral-50 max-md:px-5"
+          disabled={isSubmitting}
+          className="w-full py-3.5 mt-4 font-semibold bg-red-500 hover:bg-red-600 transition-colors rounded text-white text-sm shadow-sm disabled:opacity-50"
         >
-          Create Account
+          {isSubmitting ? "Creating Account..." : "Create Account"}
         </button>
       </form>
-      <div className="flex flex-col items-center mt-4">
-        <button className="flex gap-4 items-center justify-center px-20 py-4 rounded border border-solid border-black border-opacity-40 max-md:px-5">
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d0ff62de078180931d8908f5145e028d8dd25c93a1fb7e335c0aa1484e45dba4?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-            alt=""
-            className="object-contain shrink-0 w-6 aspect-square"
-          />
-          <span>Sign up with Google</span>
-        </button>
-        <div className="flex gap-4 items-center mt-8">
-          <p className="self-stretch my-auto opacity-70">
-            Already have an account?
-          </p>
-          <Link
-            to="/login"
-            className="self-stretch my-auto font-medium opacity-70"
-          >
-            Log in
-          </Link>
-        </div>
+
+      <div className="flex gap-2 items-center justify-center mt-6 text-sm text-gray-600">
+        <span>Already have an account?</span>
+        <Link href="/login" className="font-semibold text-red-500 hover:underline">
+          Log in
+        </Link>
       </div>
     </section>
   );

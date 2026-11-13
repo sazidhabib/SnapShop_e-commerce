@@ -26,22 +26,24 @@ const ServiceFeatures: React.FC = () => {
   ];
 
   return (
-    <section className="flex flex-wrap gap-6 justify-center items-center mt-20 w-full px-4  mx-auto md:px-6 lg:px-8">
+    <section className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center mt-16 md:mt-28 w-full max-w-[1170px] px-4 mx-auto">
       {features.map((feature, index) => (
         <div
           key={index}
-          className="flex flex-col items-center text-center min-w-[220px] max-w-xs p-4 md:min-w-[280px] md:p-6"
+          className="flex flex-col items-center text-center max-w-xs p-4"
         >
-          <img
-            loading="lazy"
-            src={feature.icon}
-            className="w-16 h-16 md:w-20 md:h-20"
-            alt={feature.title}
-          />
-          <h4 className="mt-4 text-lg font-semibold md:text-xl">
+          <div className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
+            <img
+              loading="lazy"
+              src={feature.icon}
+              className="w-full h-full object-contain"
+              alt={feature.title}
+            />
+          </div>
+          <h4 className="mt-4 text-base md:text-lg font-bold tracking-wide uppercase text-black">
             {feature.title}
           </h4>
-          <p className="mt-2 text-sm text-gray-600 md:text-base">
+          <p className="mt-2 text-xs md:text-sm text-gray-600">
             {feature.description}
           </p>
         </div>

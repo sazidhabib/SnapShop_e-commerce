@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useContext } from "react";
+import Link from "next/link";
 import { GlobalContext } from "../../context/GlobalContext";
 import AccountManagement from "./AccountManagement";
 import ProfileEdit from "./ProfileEdit";
@@ -9,20 +12,23 @@ const AccountPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col bg-white">
-      <main className="flex flex-col items-center">
-        <div className="flex flex-wrap gap-10 self-center mt-20 w-full text-sm max-w-[1170px] max-md:mt-10 max-md:max-w-full">
-          <div className="flex flex-1 gap-3 items-center text-black">
-            <span className="self-stretch my-auto opacity-50">Home</span>
-            <span className="self-stretch my-auto">My Account</span>
-          </div>
-          <div className="leading-5 text-red-500">
-            Welcome!{" "}
-            <span className="text-red-500">{user?.firstName || ""}</span>
+    <div className="flex flex-col bg-white pb-20">
+      <main className="flex flex-col items-center max-w-[1170px] w-full mx-auto px-4">
+        <div className="flex flex-wrap justify-between items-center mt-12 w-full text-sm">
+          <nav aria-label="Breadcrumb" className="flex gap-2 items-center text-gray-500">
+            <Link href="/" className="hover:text-black transition-colors">
+              Home
+            </Link>
+            <span>/</span>
+            <span className="text-black font-medium">My Account</span>
+          </nav>
+          <div className="text-sm font-medium">
+            Welcome! <span className="text-red-500 font-semibold">{user?.firstName || "Shopper"}</span>
           </div>
         </div>
-        <section className="self-center mt-20 w-full max-w-[1170px] max-md:mt-10 max-md:max-w-full">
-          <div className="flex gap-5 max-md:flex-col">
+
+        <section className="mt-12 w-full">
+          <div className="flex gap-8 flex-col md:flex-row">
             <AccountManagement />
             <ProfileEdit />
           </div>

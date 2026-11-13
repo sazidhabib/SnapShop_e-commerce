@@ -1,5 +1,8 @@
+"use client";
+
 import React, { useRef } from "react";
 import CategoryCard from "./CategoryCard";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const CategorySection: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -43,40 +46,40 @@ const CategorySection: React.FC = () => {
   ];
 
   return (
-    <section className="flex flex-col items-center mt-20 px-4 md:px-6 lg:px-8">
-      <div className="flex flex-wrap gap-6 items-center justify-between w-full">
+    <section className="flex flex-col mt-16 md:mt-24 w-full max-w-[1170px] mx-auto px-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 w-full">
         <div className="flex flex-col items-start">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-10 bg-red-500 rounded"></div>
-            <h2 className="text-base font-semibold text-red-500">Categories</h2>
+          <div className="flex items-center gap-2.5">
+            <div className="w-4 h-9 sm:w-5 sm:h-10 bg-red-500 rounded"></div>
+            <h2 className="text-sm sm:text-base font-semibold text-red-500">Categories</h2>
           </div>
-          <h3 className="mt-4 text-2xl font-semibold md:text-3xl lg:text-4xl text-black">
+          <h3 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-black">
             Browse By Category
           </h3>
         </div>
-        <div className="flex gap-2">
-          <button aria-label="Previous category" onClick={() => scroll("left")} className="focus:outline-none">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/6d46c131187bfff9eb633481579a064341b51d7196040ee40dd3f9577e445a5e?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-              className="w-10 md:w-12"
-              alt=""
-            />
+        <div className="flex gap-2 self-end sm:self-auto">
+          <button
+            aria-label="Previous category"
+            onClick={() => scroll("left")}
+            className="w-10 h-10 rounded-full bg-neutral-100 hover:bg-neutral-200 text-black flex items-center justify-center transition-all focus:outline-none"
+          >
+            <FiChevronLeft className="w-5 h-5" />
           </button>
-          <button aria-label="Next category" onClick={() => scroll("right")} className="focus:outline-none">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/e88e31fcac886e936832d43b7fb2b7a3e219274da66d8e9d07a08a6cc7094c1b?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-              className="w-10 md:w-12"
-              alt=""
-            />
+          <button
+            aria-label="Next category"
+            onClick={() => scroll("right")}
+            className="w-10 h-10 rounded-full bg-neutral-100 hover:bg-neutral-200 text-black flex items-center justify-center transition-all focus:outline-none"
+          >
+            <FiChevronRight className="w-5 h-5" />
           </button>
         </div>
       </div>
-      <div ref={scrollRef} className="flex overflow-x-auto scrollbar-hide gap-4 mt-10 max-w-[1280px] w-full">
+      <div
+        ref={scrollRef}
+        className="flex overflow-x-auto scrollbar-hide gap-3.5 sm:gap-6 mt-8 sm:mt-10 w-full pb-2"
+      >
         {categories.map((category, index) => (
-          <div
-            key={index}
-            className="min-w-[120px] sm:min-w-[160px] md:min-w-[180px] lg:min-w-[200px]"
-          >
+          <div key={index} className="shrink-0">
             <CategoryCard {...category} />
           </div>
         ))}

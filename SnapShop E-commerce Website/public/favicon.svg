@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="snapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF5252" />
+      <stop offset="100%" stop-color="#DB4444" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- Modern Rounded Squircle Background -->
+  <rect width="64" height="64" rx="16" fill="url(#snapGrad)" />
+
+  <!-- Shopping Bag Handle -->
+  <path
+    d="M24 23V18C24 13.58 27.58 10 32 10C36.42 10 40 13.58 40 18V23"
+    stroke="white"
+    stroke-width="3.5"
+    stroke-linecap="round"
+  />
+
+  <!-- Shopping Bag Body -->
+  <path
+    d="M17 23H47L44.6 49.5C44.4 51.5 42.7 53 40.7 53H23.3C21.3 53 19.6 51.5 19.4 49.5L17 23Z"
+    fill="white"
+    fill-opacity="0.22"
+    stroke="white"
+    stroke-width="3.5"
+    stroke-linejoin="round"
+  />
+
+  <!-- Snap Lightning Icon in Bag Center -->
+  <path
+    d="M34.5 26L26 38H33L29.5 48L40 35H33L36.5 26H34.5Z"
+    fill="white"
+    filter="url(#shadow)"
+  />
+</svg>

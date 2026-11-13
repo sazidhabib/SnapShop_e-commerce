@@ -1,36 +1,48 @@
+"use client";
+
 import React, { useState } from "react";
 
 const CouponForm: React.FC = () => {
   const [coupon, setCoupon] = useState("");
+  const [status, setStatus] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle coupon submission
-    console.log("Coupon submitted:", coupon);
+    if (!coupon.trim()) return;
+    if (coupon.toUpperCase() === "SNAP10") {
+      setStatus("10% discount applied!");
+    } else {
+      setStatus("Invalid or expired coupon code.");
+    }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-wrap gap-4 items-end min-w-[240px] max-md:max-w-full"
-    >
-      <div className="flex overflow-hidden flex-col justify-center items-start px-6 py-4 text-black rounded border border-black border-solid min-w-[240px] w-[300px] max-md:px-5">
-        <input
-          type="text"
-          value={coupon}
-          onChange={(e) => setCoupon(e.target.value)}
-          placeholder="Coupon Code"
-          className="w-full bg-transparent border-none outline-none"
-          aria-label="Enter coupon code"
-        />
-      </div>
-      <button
-        type="submit"
-        className="gap-2.5 self-stretch px-12 py-4 font-medium bg-red-500 rounded text-neutral-50 max-md:px-5"
+    <div className="flex flex-col gap-2">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-wrap gap-4 items-center min-w-[240px]"
       >
-        Apply Coupon
-      </button>
-    </form>
+        <div className="flex px-4 py-3 text-black rounded border border-gray-300 min-w-[240px] w-[300px]">
+          <input
+            type="text"
+            value={coupon}
+            onChange={(e) => setCoupon(e.target.value)}
+            placeholder="Coupon Code (e.g. SNAP10)"
+            className="w-full bg-transparent border-none outline-none text-sm"
+            aria-label="Enter coupon code"
+          />
+        </div>
+        <button
+          type="submit"
+          className="px-8 py-3 font-medium bg-red-500 hover:bg-red-600 transition-colors rounded text-white text-sm"
+        >
+          Apply Coupon
+        </button>
+      </form>
+      {status && (
+        <span className="text-xs text-gray-600 italic">{status}</span>
+      )}
+    </div>
   );
 };
 

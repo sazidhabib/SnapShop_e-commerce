@@ -1,143 +1,112 @@
-# SnapShop_E-Commerce
+# SnapShop E-Commerce (Next.js App Router)
 
-This is a responsive e-commerce platform built with **TypeScript**, **React**, and **Tailwind CSS**. It features product management, user authentication, and user-specific functionalities such as a wishlist and shopping cart.
+A high-performance, modern full-stack e-commerce web application built with **Next.js (App Router)**, **TypeScript**, and **Tailwind CSS**.
 
-Live demo - https://sazidsnapshop.netlify.app/
-
-## Features
-- **Responsive UI**: Seamless experience on all devices.
-- **Product Management**: Display, cart, and wishlist management.
-- **User Authentication**: Login, register, and protected routes.
-- **Form Handling and Validation**: Implemented using React Hook Form and Yup.
-
-## Built With
-- **React**: UI framework
-- **TypeScript**: For type safety
-- **Tailwind CSS**: For responsive styling
-- **React Hook Form**: For form handling
-- **Yup**: For form validation
-- **React Router**: For navigation
-- **useContext** & **useReducer**: For state management (replacing Redux)
+Featuring server-side rendering (SSR), dynamic SEO metadata generation, hybrid static/dynamic routing, accessible design primitives, and an SSR-safe reactive global state architecture.
 
 ---
 
-## Getting Started
-These instructions will help you set up and run the project on your local machine.
+## 🚀 Key Features & Architectural Upgrades
 
-### Prerequisites
-- **Node.js** (>=14.x)
-- npm or yarn package manager
-- Vite (bundler, initialized with project)
-
-### Installation
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/your-username/your-repository.git
-   cd your-repository
-
-## Install Dependencies
-
-After cloning the repository, install the required dependencies for the project. Choose one of the following commands based on your package manager:
-
-- **Using npm**:
-  ```bash
-  npm install
-  
-- **Using yarn**:
-  ```bash
-  npm install
-  
-## Install Dependencies
-
-To build the project for production, run the following commands. This will create an optimized, production-ready version of the app.
-
-- **Using npm**:
-  ```bash
-  npm run build
-  
-- **Using yarn**:
-  ```bash
-  yarn build
-  
-## Preview Production Build
-
-To preview the production build locally, use the following command:
-
-- **Using npm**:
-  ```bash
-  npm run preview
-  
-- **Using yarn**:
-  ```bash
-  yarn preview
-## Login details
-- **User name & password**:
-  ```bash
-   1. username: johnd
-      password: m38rmF$
-   2. username: kevinryan
-      password: kev02937@
-  More username and password in this Api - https://fakestoreapi.com/users
-
-## Project Structure
-
-Here is an overview of the project's file structure and its main directories:
-
-- **`/src`**: Main source directory for the project.
-- **`/components`**: Contains reusable components, such as the navbar, modals, and forms.
-- **`/pages`**: Each route has a corresponding page component, e.g., the homepage, product details page, etc.
-- **`/context`**: Includes Context and Reducer files for managing the global state.
-- **`/hooks`**: Custom hooks created for specific functionalities in the app.
-- **`/utils`**: Utility functions and helper types used throughout the project.
-- **`/types`**: TypeScript interfaces and types that define data structures and props.
-- **`/assets`**: Static assets, such as images and icons.
+- **Next.js App Router (`src/app/**`)**:
+  - Modular nested layouts (`RootLayout` with persistent Navbar & Footer).
+  - Dynamic route metadata (`generateMetadata`) on product details for optimal OpenGraph & SEO indexing.
+  - Streaming suspense skeletons (`loading.tsx`) and graceful error boundaries (`error.tsx`, `not-found.tsx`).
+- **Catalog & Product Exploration**:
+  - Live server-side fetching with fallback caching against FakeStoreAPI.
+  - Interactive client catalog with instant category filtering, real-time search, and sorting (Price low-to-high, high-to-low, top rated).
+  - Dynamic product detail views with multi-angle image previews, color & size selectors, and quantity adjusters.
+- **Cart & Wishlist Architecture**:
+  - SSR-hydration-safe global store (`GlobalContext` + `AppReducer`) preventing React hydration mismatch warnings.
+  - Interactive item quantity modification, instant subtotals, coupon code application, and move-all-to-bag capabilities.
+- **Checkout & Billing**:
+  - Full billing form validation and dynamic order breakdown synced with live cart state.
+  - Flexible payment options (Bank Transfer, Cash on Delivery).
+- **Authentication & User Profile**:
+  - Protected client routes with hydration awareness (`ProtectedRoute.tsx`).
+  - Login & Sign-up workflows validated with React Hook Form and schema resolvers.
+- **Image Optimization**:
+  - Configured Next.js `<Image />` remote patterns with responsive sizing (`sizes`), layout-shift prevention, and WebP compression.
 
 ---
 
-## Important Scripts
+## 🛠️ Tech Stack
 
-To run the application or build it for production, here are some essential scripts:
-
-- **`npm run dev` / `yarn dev`**: Runs the app in development mode with hot-reloading.
-- **`npm run build` / `yarn build`**: Builds the app for production, optimizing files for deployment.
-- **`npm run preview` / `yarn preview`**: Previews the production build on a local server.
-
----
-
-## Dependencies
-
-This project is built with the following main dependencies:
-
-- **react**: For building user interfaces.
-- **react-dom**: For rendering React components to the DOM.
-- **typescript**: Adds static typing for better code quality and maintainability.
-- **tailwindcss**: Provides a utility-first CSS framework for responsive styling.
-- **react-hook-form**: Handles form state management and validation.
-- **yup**: Schema-based validation library used with forms.
-- **react-router-dom**: Handles routing and navigation between different pages.
-- **useContext & useReducer**: Manages global state, providing a lightweight alternative to Redux.
-
-For a complete list of dependencies and versions, please refer to the `package.json` file.
+| Layer | Technology |
+| :--- | :--- |
+| **Framework** | Next.js (App Router) |
+| **Language** | TypeScript (Strict mode) |
+| **Styling** | Tailwind CSS & PostCSS |
+| **State Management** | React Context + Reducer with SSR Hydration Guard |
+| **Form & Validation** | React Hook Form & Yup / Zod resolvers |
+| **Icons & Media** | React Icons (`react-icons`) |
+| **Data Source** | FakeStore API |
 
 ---
 
-## License
+## 📁 Project Structure
 
-This project is distributed under the MIT License. See the `LICENSE` file in the repository for more information.
+```plaintext
+SnapShop E-commerce Website/
+├── public/                     # Static media and icons
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── about/page.tsx      # Static company story & stats
+│   │   ├── cart/page.tsx       # Shopping cart (Protected)
+│   │   ├── checkout/page.tsx   # Checkout & billing flow (Protected)
+│   │   ├── contact/page.tsx    # Contact information & message form
+│   │   ├── login/page.tsx      # User authentication
+│   │   ├── product/            # Catalog listing & search
+│   │   │   ├── page.tsx
+│   │   │   ├── loading.tsx
+│   │   │   └── [id]/           # Dynamic product detail (SSR/Metadata)
+│   │   │       ├── page.tsx
+│   │   │       └── loading.tsx
+│   │   ├── profile/page.tsx    # Account management (Protected)
+│   │   ├── signup/page.tsx     # Member registration
+│   │   ├── wishlist/page.tsx   # Saved items & quick move-to-cart
+│   │   ├── error.tsx           # Global runtime error boundary
+│   │   ├── not-found.tsx       # Custom 404 handler
+│   │   ├── globals.css         # Tailwind & custom tokens
+│   │   └── layout.tsx          # Root layout & providers
+│   ├── components/             # Reusable UI & section components
+│   ├── context/                # SSR-safe state & reducer
+│   ├── features/               # Feature-sliced domain modules
+│   └── lib/                    # API clients & utilities
+├── next.config.mjs             # Remote image hosts & Next.js config
+├── tailwind.config.js          # Color palette & breakpoints
+└── tsconfig.json               # Path aliases (@/* -> ./src/*)
+```
 
 ---
 
-## Demo
-![home](https://github.com/user-attachments/assets/58e724d7-7f33-41a9-9a94-64c4ddd7bbc0)
-![shop](https://github.com/user-attachments/assets/73b59779-22c2-45fa-bdd5-50761663d248)
-![productDetail](https://github.com/user-attachments/assets/923f826d-b69f-4ede-ab11-bbb301298491)
-![wishList](https://github.com/user-attachments/assets/ec30e94d-368a-408c-8ce0-befd3b37565a)
-![Cart](https://github.com/user-attachments/assets/db682adc-a190-43a7-8cc6-249b4c232f60)
-![userinformation](https://github.com/user-attachments/assets/17b4ea11-e2eb-4c65-bd4e-bc5c7ba5954f)
+## 💻 Getting Started
 
+### 1. Prerequisites
+- **Node.js** (v18.17+ or v20+)
+- **npm** or **yarn**
 
+### 2. Installation
+Navigate into the project directory and install dependencies:
 
+```bash
+cd "SnapShop E-commerce Website"
+npm install
+```
 
+### 3. Development Server
+Start the local Next.js development server:
 
+```bash
+npm run dev
+```
 
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### 4. Production Build
+Verify compilation, type safety, and static asset generation:
+
+```bash
+npm run build
+npm run start
+```

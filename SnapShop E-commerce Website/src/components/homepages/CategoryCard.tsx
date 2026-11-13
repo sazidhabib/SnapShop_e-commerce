@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 interface CategoryCardProps {
   name: string;
@@ -12,21 +14,25 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   active = false,
 }) => {
   return (
-    <div
-      className={`flex overflow-hidden flex-col items-center px-9 py-6 rounded border border-solid ${
+    <Link
+      href={`/product?category=${encodeURIComponent(name.toLowerCase())}`}
+      className={`group flex overflow-hidden flex-col items-center justify-center p-6 rounded-lg border transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
         active
-          ? "bg-red-500 shadow-sm text-neutral-50"
-          : "border-black border-opacity-30 text-black"
-      } w-[170px] max-md:px-5`}
+          ? "bg-red-500 shadow-sm text-neutral-50 border-red-500"
+          : "border-gray-200 text-black hover:border-red-500 hover:text-red-500 bg-white"
+      } w-[170px] shrink-0 text-center`}
     >
-      <img
-        loading="lazy"
-        src={icon}
-        className="object-contain w-14 aspect-square"
-        alt={`${name} icon`}
-      />
-      <p className="mt-4">{name}</p>
-    </div>
+      <div className="relative w-12 h-12 mb-3">
+        <Image
+          src={icon}
+          className="object-contain"
+          alt={`${name} icon`}
+          fill
+          sizes="48px"
+        />
+      </div>
+      <p className="text-sm font-medium">{name}</p>
+    </Link>
   );
 };
 

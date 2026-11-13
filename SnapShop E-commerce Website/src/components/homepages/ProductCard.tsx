@@ -20,7 +20,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   discount,
 }) => {
   return (
-    <article className="flex flex-col min-w-[240px] w-[270px]">
+    <article className="flex flex-col w-full max-w-[270px]">
       <div className="flex overflow-hidden gap-1 items-start px-3 pt-3 pb-12 max-w-full rounded bg-neutral-100 w-[270px]">
         <div className="flex flex-col text-xs whitespace-nowrap text-neutral-50">
           <div className="gap-2.5 self-start px-3 py-1 bg-red-500 rounded">

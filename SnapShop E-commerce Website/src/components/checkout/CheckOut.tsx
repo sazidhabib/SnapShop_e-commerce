@@ -1,53 +1,39 @@
+"use client";
+
 import React from "react";
-import TopHeader from "./TopHeader";
-import Header from "./Header";
+import Link from "next/link";
 import BillingDetails from "./BillingDetails";
 import OrderSummary from "./OrderSummary";
-import Footer from "./Footer";
 
 const CheckOut: React.FC = () => {
   return (
-    <div className="flex flex-col bg-white">
-      <TopHeader />
-      <Header />
-      <div className="mt-4 w-full bg-black border border-black border-solid opacity-30 min-h-[1px] max-md:max-w-full" />
-      <main className="flex flex-col items-start self-center mt-20 w-full max-w-[1170px] max-md:mt-10 max-md:max-w-full">
-        <nav aria-label="Breadcrumb">
-          <ol className="flex gap-3 items-center text-sm text-black">
-            <li>
-              <a href="#" className="opacity-50">
-                Account
-              </a>
-            </li>
-            <li>
-              <a href="#" className="opacity-50">
-                My Account
-              </a>
-            </li>
-            <li>
-              <a href="#" className="opacity-50">
-                Product
-              </a>
-            </li>
-            <li>
-              <a href="#" className="opacity-50">
-                View Cart
-              </a>
-            </li>
-            <li aria-current="page">CheckOut</li>
-          </ol>
+    <div className="flex flex-col bg-white pb-20">
+      <main className="flex flex-col items-start self-center mt-12 w-full max-w-[1170px] mx-auto px-4">
+        <nav aria-label="Breadcrumb" className="mb-10 text-sm text-gray-500 flex gap-2 items-center">
+          <Link href="/" className="hover:text-black transition-colors">
+            Account
+          </Link>
+          <span>/</span>
+          <Link href="/profile" className="hover:text-black transition-colors">
+            My Account
+          </Link>
+          <span>/</span>
+          <Link href="/cart" className="hover:text-black transition-colors">
+            Cart
+          </Link>
+          <span>/</span>
+          <span className="text-black font-medium">Checkout</span>
         </nav>
-        <h1 className="mt-20 text-4xl font-medium tracking-widest leading-none text-black max-md:mt-10">
-          Billing Details
+
+        <h1 className="text-3xl font-bold tracking-tight text-gray-950 mb-10">
+          Checkout &amp; Billing
         </h1>
-        <div className="self-stretch mt-12 max-md:mt-10 max-md:max-w-full">
-          <div className="flex gap-5 max-md:flex-col">
-            <BillingDetails />
-            <OrderSummary />
-          </div>
+
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-12 w-full">
+          <BillingDetails />
+          <OrderSummary />
         </div>
       </main>
-      <Footer />
     </div>
   );
 };

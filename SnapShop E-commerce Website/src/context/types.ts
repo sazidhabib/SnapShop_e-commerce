@@ -4,7 +4,16 @@ export interface Product {
   price: number;
   image?: string;
   quantity?: number;
-  // Add other relevant product fields here
+  description?: string;
+  category?: string;
+  rating?: number | {
+    rate: number;
+    count: number;
+  };
+  reviews?: number;
+  originalPrice?: string;
+  discount?: string;
+  isNew?: boolean;
 }
 
 export interface User {
@@ -15,6 +24,7 @@ export interface User {
   lastName: string;
   phone: string;
   address?: string;
+  avatar?: string;
 }
 
 export interface State {
@@ -22,9 +32,11 @@ export interface State {
   cart: Product[];
   isLogin: boolean;
   user?: User;
+  isHydrated?: boolean;
 }
 
 export type Action =
+  | { type: "INIT_STORE"; payload: { wishlist: Product[]; cart: Product[]; isLogin: boolean; user?: User } }
   | { type: "ADD_TO_WISHLIST"; payload: Product }
   | { type: "REMOVE_FROM_WISHLIST"; payload: number }
   | { type: "ADD_TO_CART"; payload: Product }

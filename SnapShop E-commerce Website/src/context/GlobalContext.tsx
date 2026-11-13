@@ -1,24 +1,23 @@
-import React, { createContext, useReducer, useEffect, ReactNode } from "react";
+"use client";
+
+import React, { createContext, useReducer, useEffect, ReactNode, useRef } from "react";
 import AppReducer from "./AppReducer";
 import { State, User, Product } from "./types";
 
-// Initial state
+// SSR-safe Initial state
 const initialState: State = {
   isLogin: false,
-  wishlist: localStorage.getItem("wishlist")
-    ? JSON.parse(localStorage.getItem("wishlist") as string)
-    : [],
-  cart: localStorage.getItem("cart")
-    ? JSON.parse(localStorage.getItem("cart") as string)
-    : [],
+  wishlist: [],
+  cart: [],
+  isHydrated: false,
 };
 
-// Create context
-interface GlobalContextProps {
+export interface GlobalContextProps {
   wishlist: Product[];
   cart: Product[];
   isLogin: boolean;
-  user?: User; // Add user type here
+  user?: User;
+  isHydrated: boolean;
   addToWishlist: (product: Product) => void;
   removeFromWishlist: (id: number) => void;
   addToCart: (product: Product) => void;
@@ -29,7 +28,6 @@ interface GlobalContextProps {
   decreaseQuantity: (product: Product) => void;
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const GlobalContext = createContext<GlobalContextProps | undefined>(
   undefined
 );
@@ -38,17 +36,85 @@ interface GlobalProviderProps {
   children: ReactNode;
 }
 
-// Provider component
 export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
+  const isFirstRender = useRef(true);
 
+  // Client-side safe hydration from localStorage
   useEffect(() => {
-    localStorage.setItem("wishlist", JSON.stringify(state.wishlist));
-    localStorage.setItem("cart", JSON.stringify(state.cart));
-    localStorage.setItem("user", JSON.stringify(state.user));
-  }, [state]);
+    try {
+      let wishlist: Product[] = [];
+      let cart: Product[] = [];
+      let user: User | undefined = undefined;
+      let isLogin = false;
 
-  // Actions
+      if (typeof window !== "undefined") {
+        const storedWishlist = localStorage.getItem("wishlist");
+        if (storedWishlist && storedWishlist !== "undefined" && storedWishlist !== "null") {
+          try {
+            wishlist = JSON.parse(storedWishlist);
+          } catch (e) {
+            wishlist = [];
+          }
+        }
+
+        const storedCart = localStorage.getItem("cart");
+        if (storedCart && storedCart !== "undefined" && storedCart !== "null") {
+          try {
+            cart = JSON.parse(storedCart);
+          } catch (e) {
+            cart = [];
+          }
+        }
+
+        const storedUser = localStorage.getItem("user");
+        if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
+          try {
+            user = JSON.parse(storedUser);
+          } catch (e) {
+            user = undefined;
+          }
+        }
+
+        const storedLogin = localStorage.getItem("isLogin");
+        isLogin = storedLogin === "true" || (Boolean(user) && storedLogin !== "false");
+      }
+
+      dispatch({
+        type: "INIT_STORE",
+        payload: { wishlist, cart, isLogin, user },
+      });
+    } catch (e) {
+      console.error("Failed to hydrate state from localStorage:", e);
+      dispatch({
+        type: "INIT_STORE",
+        payload: { wishlist: [], cart: [], isLogin: false, user: undefined },
+      });
+    }
+  }, []);
+
+  // Save changes to localStorage after initial hydration
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("wishlist", JSON.stringify(state.wishlist || []));
+        localStorage.setItem("cart", JSON.stringify(state.cart || []));
+        if (state.user) {
+          localStorage.setItem("user", JSON.stringify(state.user));
+        } else {
+          localStorage.removeItem("user");
+        }
+        localStorage.setItem("isLogin", state.isLogin ? "true" : "false");
+      } catch (e) {
+        console.error("Failed to persist state to localStorage:", e);
+      }
+    }
+  }, [state.wishlist, state.cart, state.user, state.isLogin]);
+
   const addToWishlist = (product: Product) => {
     dispatch({ type: "ADD_TO_WISHLIST", payload: product });
   };
@@ -60,13 +126,30 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const addToCart = (product: Product) => {
     dispatch({ type: "ADD_TO_CART", payload: product });
   };
+
   const increaseQuantity = (product: Product) => {
     dispatch({ type: "INCREASE_QUANTITY", payload: product });
   };
+
   const decreaseQuantity = (product: Product) => {
     dispatch({ type: "DECREASE_QUANTITY", payload: product });
   };
+
   const setLogin = (isLogin: boolean, user?: User) => {
+    // Immediately persist to localStorage synchronously to prevent race conditions
+    if (typeof window !== "undefined") {
+      try {
+        if (isLogin && user) {
+          localStorage.setItem("isLogin", "true");
+          localStorage.setItem("user", JSON.stringify(user));
+        } else {
+          localStorage.setItem("isLogin", "false");
+          localStorage.removeItem("user");
+        }
+      } catch (e) {
+        console.error("Failed to save auth state to localStorage:", e);
+      }
+    }
     dispatch({ type: "SET_TO_LOGIN", payload: { isLogin, user } });
   };
 
@@ -85,6 +168,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
         cart: state.cart,
         isLogin: state.isLogin,
         user: state.user,
+        isHydrated: state.isHydrated ?? false,
         addToWishlist,
         removeFromWishlist,
         addToCart,

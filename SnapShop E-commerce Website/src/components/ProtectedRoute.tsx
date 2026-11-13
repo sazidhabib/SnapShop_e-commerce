@@ -1,24 +1,37 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { useContext } from "react";
+"use client";
+
+import React, { useContext, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { GlobalContext } from "../context/GlobalContext";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-// ProtectedRoute component
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isLogin } = useContext(GlobalContext) ?? {
-    isLogin: false,
-  };
+  const router = useRouter();
+  const context = useContext(GlobalContext);
+  const isLogin = context?.isLogin ?? false;
+  const isHydrated = context?.isHydrated ?? false;
 
-  // Redirect to the login page if not authenticated
-  if (!isLogin) {
-    return <Navigate to="/login" />;
+  useEffect(() => {
+    if (isHydrated && !isLogin) {
+      router.push("/login");
+    }
+  }, [isHydrated, isLogin, router]);
+
+  if (!isHydrated) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-500"></div>
+      </div>
+    );
   }
 
-  // If authenticated, render the children (protected component)
+  if (!isLogin) {
+    return null;
+  }
+
   return <>{children}</>;
 };
 

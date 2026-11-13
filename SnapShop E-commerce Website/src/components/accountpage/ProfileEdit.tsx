@@ -1,4 +1,6 @@
-import React, { useContext } from "react";
+"use client";
+
+import React, { useContext, useState } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 
 const ProfileEdit: React.FC = () => {

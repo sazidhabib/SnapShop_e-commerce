@@ -1,18 +1,26 @@
-import React from "react";
+"use client";
+
+import React, { useContext } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { GlobalContext } from "../../context/GlobalContext";
+import { FaTrash } from "react-icons/fa";
 
 type ProductCardProps = {
   id: string;
   image: string;
   title: string;
-  price: string;
+  price: string | number;
   originalPrice?: string;
   discount?: string;
   isNew?: boolean;
   rating?: number;
   reviews?: number;
+  isWishlistItem?: boolean;
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({
+  id,
   image,
   title,
   price,
@@ -21,73 +29,87 @@ const ProductCard: React.FC<ProductCardProps> = ({
   isNew,
   rating,
   reviews,
+  isWishlistItem = false,
 }) => {
+  const { removeFromWishlist, addToCart } = useContext(GlobalContext) ?? {
+    removeFromWishlist: () => {},
+    addToCart: () => {},
+  };
+
+  const numericId = parseInt(id, 10) || 0;
+  const numPrice = typeof price === "number" ? price : parseFloat(price) || 0;
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: numericId,
+      image,
+      title,
+      price: numPrice,
+      quantity: 1,
+    });
+  };
+
   return (
-    <div className="flex flex-col min-w-[240px] w-[270px]">
-      <div className="flex overflow-hidden flex-col pt-3 w-full rounded bg-neutral-100 max-w-[270px]">
-        <div className="flex gap-2.5 mx-3 max-md:mx-2.5">
-          <div className="flex flex-col text-xs whitespace-nowrap text-neutral-50">
+    <div className="flex flex-col w-full max-w-[270px]">
+      <div className="relative overflow-hidden flex flex-col justify-between pt-3 w-full rounded-lg bg-neutral-100 h-[250px]">
+        <div className="flex justify-between items-start px-3 w-full">
+          <div className="flex flex-col gap-1 text-xs">
             {discount && (
-              <div className="gap-2.5 self-start px-3 py-1 bg-red-500 rounded">
+              <span className="px-2.5 py-1 bg-red-500 text-white font-medium rounded text-[11px]">
                 {discount}
-              </div>
+              </span>
             )}
             {isNew && (
-              <div className="gap-2.5 self-start px-3 py-1 bg-green-500 rounded">
+              <span className="px-2.5 py-1 bg-green-500 text-white font-medium rounded text-[11px]">
                 NEW
-              </div>
+              </span>
             )}
-            <img
-              loading="lazy"
+          </div>
+
+          {isWishlistItem && (
+            <button
+              onClick={() => removeFromWishlist(numericId)}
+              className="p-1.5 rounded-full bg-white text-gray-400 hover:text-red-500 transition-colors shadow-sm"
+              aria-label="Remove from wishlist"
+            >
+              <FaTrash className="text-sm" />
+            </button>
+          )}
+        </div>
+
+        <Link href={`/product/${numericId}`} className="relative w-full h-[140px] flex items-center justify-center px-4">
+          <div className="relative w-full h-full">
+            <Image
               src={image}
               alt={title}
-              className="object-contain z-10 self-end max-w-full aspect-[0.95] w-[158px]"
+              fill
+              sizes="240px"
+              className="object-contain"
             />
           </div>
-          <button
-            aria-label="Add to wishlist"
-            className="flex flex-col self-start"
-          >
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/92f95af307a693492ef165c4482565d88008392560df9e3855fc15ed6903d028?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-              alt=""
-              className="object-contain aspect-square w-[34px]"
-            />
-          </button>
-        </div>
+        </Link>
+
         <button
-          className="flex flex-col justify-center items-center px-7 py-2.5 mt-3.5 w-full text-xs text-white bg-black rounded-none max-md:px-5"
-          aria-label="Add to Cart"
+          onClick={handleAddToCart}
+          className="w-full py-2.5 bg-black hover:bg-red-500 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-2"
         >
-          <div className="flex gap-2 items-center">
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb1c7b4c5b8a14be22a3ab2dcaf00ea2a28efa02e58b408afde256eec3ce6cfd?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-              alt=""
-              className="object-contain shrink-0 self-stretch my-auto w-6 aspect-square"
-            />
-            <span className="self-stretch my-auto">Add To Cart</span>
-          </div>
+          Add To Cart
         </button>
       </div>
-      <div className="flex flex-col items-start self-start mt-4 text-base font-medium">
-        <h3 className="self-stretch text-black">{title}</h3>
-        <div className="flex gap-3 items-start mt-2 whitespace-nowrap">
-          <span className="text-red-500">{price}</span>
+
+      <div className="flex flex-col items-start mt-3 text-sm font-medium">
+        <Link href={`/product/${numericId}`} className="hover:text-red-500 transition-colors">
+          <h3 className="text-black font-semibold line-clamp-1">{title}</h3>
+        </Link>
+        <div className="flex gap-2.5 items-center mt-1">
+          <span className="text-red-500 font-bold">${numPrice.toFixed(2)}</span>
           {originalPrice && (
-            <span className="text-black opacity-50">{originalPrice}</span>
+            <span className="text-gray-400 line-through text-xs">{originalPrice}</span>
           )}
         </div>
         {rating && (
-          <div className="flex gap-2 items-start mt-2 text-sm font-semibold text-black whitespace-nowrap">
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/f79bd71a6471f38d5d1fc5e45c151fa99346fc4a5342fd2b25d87f1e68ade395?placeholderIfAbsent=true&apiKey=f40e85373ac14970bb43d76751298eef"
-              alt={`Rating: ${rating} out of 5`}
-              className="object-contain shrink-0 aspect-[5] w-[100px]"
-            />
-            <span className="w-8 opacity-50">({reviews})</span>
+          <div className="text-xs text-gray-500 mt-1">
+            ⭐ {rating} ({reviews} reviews)
           </div>
         )}
       </div>

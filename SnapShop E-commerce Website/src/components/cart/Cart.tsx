@@ -1,72 +1,83 @@
+"use client";
+
 import React, { useContext } from "react";
+import Link from "next/link";
 import { GlobalContext } from "../../context/GlobalContext";
 import CartItem from "./CartItem";
 import CouponForm from "./CouponForm";
 import CartTotal from "./CartTotal";
 
-interface CartProps {
-  id: number;
-  image: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-const Cart: React.FC<CartProps> = () => {
-  const { cart } = useContext(GlobalContext) ?? {
+const Cart: React.FC = () => {
+  const { cart, isHydrated } = useContext(GlobalContext) ?? {
     cart: [],
+    isHydrated: false,
   };
-  console.log("cart: ", cart);
-  // Calculate the total amount based on items in the cart
+
   const totalAmount = cart.reduce(
-    (total, item) => total + item.price * (item.quantity || 0),
+    (total, item) => total + item.price * (item.quantity || 1),
     0
   );
 
-  // Calculate the total item number based on items in the cart
-
   return (
     <div className="flex overflow-hidden flex-col bg-white">
-      <main className="flex flex-col self-center mt-20 w-full max-w-[1170px] max-md:mt-10 max-md:max-w-full">
-        <nav aria-label="Breadcrumb">
-          <ol className="flex gap-3 items-center self-start text-sm text-black whitespace-nowrap">
-            <li>
-              <a href="/" className="opacity-50">
-                Home
-              </a>
-            </li>
-            <li aria-current="page">Cart</li>
-          </ol>
+      <main className="flex flex-col self-center mt-12 w-full max-w-[1170px] mx-auto px-4 pb-20">
+        <nav aria-label="Breadcrumb" className="text-sm text-gray-500 flex gap-2 items-center mb-10">
+          <Link href="/" className="hover:text-black transition-colors">
+            Home
+          </Link>
+          <span>/</span>
+          <span className="text-black font-medium">Cart</span>
         </nav>
-        <section className="flex flex-col mt-20 w-full max-md:mt-10 max-md:max-w-full">
-          <div className="flex overflow-hidden flex-col justify-center px-10 py-6 w-full text-base text-black whitespace-nowrap bg-white rounded shadow-sm max-md:px-5 max-md:max-w-full">
-            <div className="flex flex-wrap justify-between gap-10 items-center max-md:max-w-full">
-              <div className="self-stretch my-auto">Product</div>
-              <div className="self-stretch my-auto">Price</div>
-              <div className="self-stretch my-auto">Quantity</div>
-              <div className="self-stretch my-auto">Subtotal</div>
+
+        <section className="flex flex-col w-full">
+          <div className="hidden md:flex justify-between items-center px-8 py-5 text-sm font-semibold text-gray-700 bg-white rounded-lg border border-gray-100 shadow-sm">
+            <div className="w-2/5">Product</div>
+            <div className="flex justify-between w-3/5">
+              <span>Price</span>
+              <span>Quantity</span>
+              <span className="min-w-[70px] text-right">Subtotal</span>
             </div>
           </div>
-          {cart.map((item) => (
-            <CartItem key={item.id} {...item} product={item} />
-          ))}
-          {cart.length === 0 && (
-            <p className="mt-5 text-center">
-              There is no product in Cart. Please add products to Cart...
-            </p>
+
+          {!isHydrated ? (
+            <div className="py-16 text-center text-gray-500 animate-pulse">Loading cart...</div>
+          ) : cart.length > 0 ? (
+            <div className="flex flex-col space-y-2 mt-2">
+              {cart.map((item) => (
+                <CartItem key={item.id} {...item} product={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="py-20 text-center flex flex-col items-center">
+              <span className="text-5xl mb-3">🛒</span>
+              <h2 className="text-xl font-semibold text-gray-900">Your cart is empty</h2>
+              <p className="text-gray-500 text-sm mt-1">Looks like you haven't added anything to your cart yet.</p>
+              <Link
+                href="/product"
+                className="mt-6 px-8 py-3 bg-red-500 text-white rounded-md font-medium text-sm hover:bg-red-600 transition-colors"
+              >
+                Start Shopping
+              </Link>
+            </div>
           )}
-          <div className="flex flex-wrap gap-10 items-start mt-6 text-base font-medium text-black max-md:max-w-full">
-            <button className="gap-2.5 self-stretch px-12 py-4 rounded border border-solid border-black border-opacity-50 max-md:px-5">
-              Return To Shop
-            </button>
-            <button className="gap-2.5 self-stretch px-12 py-4 rounded border border-solid border-black border-opacity-50 max-md:px-5">
-              Update Cart
-            </button>
-          </div>
-        </section>
-        <section className="flex flex-wrap gap-10 items-start mt-20 text-base max-md:mt-10 max-md:max-w-full">
-          <CouponForm />
-          <CartTotal total={totalAmount} />
+
+          {cart.length > 0 && (
+            <>
+              <div className="flex flex-wrap justify-between items-center mt-8 gap-4">
+                <Link
+                  href="/product"
+                  className="px-8 py-3 rounded-md border border-gray-400 font-medium text-sm text-gray-800 hover:border-black transition-colors"
+                >
+                  Return To Shop
+                </Link>
+              </div>
+
+              <div className="flex flex-col lg:flex-row justify-between items-start mt-16 gap-10">
+                <CouponForm />
+                <CartTotal total={totalAmount} />
+              </div>
+            </>
+          )}
         </section>
       </main>
     </div>
