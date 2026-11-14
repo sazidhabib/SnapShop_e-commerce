@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Image from "next/image";
 import { Product } from "../../context/types";
 import { GlobalContext } from "../../context/GlobalContext";
@@ -29,6 +29,11 @@ const CartItem: React.FC<CartItemProps> = ({
   };
 
   const qty = product?.quantity ?? 1;
+  const [imgSrc, setImgSrc] = useState(image || "");
+
+  useEffect(() => {
+    setImgSrc(image || "");
+  }, [image]);
 
   return (
     <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-5 mt-4 bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
@@ -41,13 +46,14 @@ const CartItem: React.FC<CartItemProps> = ({
           <FaTrash className="text-sm" />
         </button>
         <div className="relative w-16 h-16 bg-neutral-50 rounded p-1 shrink-0">
-          {image && (
+          {(imgSrc || image) && (
             <Image
-              src={image}
+              src={imgSrc || image || "https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg"}
               alt={title}
               fill
               sizes="64px"
               className="object-contain"
+              onError={() => setImgSrc("https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg")}
             />
           )}
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Link from "next/link";
 import RatingBar from "./RatingBar";
 import { GlobalContext } from "../../context/GlobalContext";
@@ -43,6 +43,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [imgSrc, setImgSrc] = useState(image);
+
+  useEffect(() => {
+    setImgSrc(image);
+  }, [image]);
 
   const existInWishlist = wishlist.some((product) => product.id === id);
   const existInCart = cart.some((product) => product.id === id);
@@ -101,12 +105,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
           <Link href={`/product/${id}`} className="relative block w-full h-[140px] px-4">
             <Image
-              src={imgSrc || image}
+              src={imgSrc || image || "https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg"}
               alt={title}
               fill
               sizes="240px"
               className="object-contain transition-transform duration-300 group-hover:scale-105"
-              onError={() => setImgSrc("https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg")}
+              onError={() => setImgSrc("https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg")}
             />
           </Link>
 

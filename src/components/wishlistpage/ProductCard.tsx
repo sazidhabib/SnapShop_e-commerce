@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { GlobalContext } from "../../context/GlobalContext";
@@ -38,6 +38,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const numericId = parseInt(id, 10) || 0;
   const numPrice = typeof price === "number" ? price : parseFloat(price) || 0;
+
+  const [imgSrc, setImgSrc] = useState(image);
+
+  useEffect(() => {
+    setImgSrc(image);
+  }, [image]);
 
   const handleAddToCart = () => {
     addToCart({
@@ -80,11 +86,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <Link href={`/product/${numericId}`} className="relative w-full h-[140px] flex items-center justify-center px-4">
           <div className="relative w-full h-full">
             <Image
-              src={image}
+              src={imgSrc || image || "https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg"}
               alt={title}
               fill
               sizes="240px"
               className="object-contain"
+              onError={() => setImgSrc("https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg")}
             />
           </div>
         </Link>

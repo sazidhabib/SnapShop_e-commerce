@@ -22,7 +22,7 @@ const WishlistPage: React.FC = () => {
   const justForYouItems = [
     {
       id: "1",
-      image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+      image: "https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg",
       title: "ASUS FHD Gaming Laptop",
       price: 960,
       originalPrice: "$1160",
@@ -32,7 +32,7 @@ const WishlistPage: React.FC = () => {
     },
     {
       id: "2",
-      image: "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+      image: "https://m.media-amazon.com/images/I/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
       title: "IPS LCD Gaming Monitor",
       price: 1160,
       rating: 5,
@@ -40,7 +40,7 @@ const WishlistPage: React.FC = () => {
     },
     {
       id: "3",
-      image: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg",
+      image: "https://m.media-amazon.com/images/I/71li-ujtlUL._AC_UX679_.jpg",
       title: "HAVIT HV-G92 Gamepad",
       price: 560,
       isNew: true,
@@ -49,7 +49,7 @@ const WishlistPage: React.FC = () => {
     },
     {
       id: "4",
-      image: "https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg",
+      image: "https://m.media-amazon.com/images/I/71YXzeOuslL._AC_UY879_.jpg",
       title: "AK-900 Wired Keyboard",
       price: 200,
       rating: 5,
@@ -84,7 +84,7 @@ const WishlistPage: React.FC = () => {
                   <div key={item.id} className="w-full flex justify-center">
                     <ProductCard
                       id={item.id.toString()}
-                      image={item.image || "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"}
+                      image={item.image || "https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg"}
                       title={item.title}
                       price={item.price}
                       isWishlistItem={true}

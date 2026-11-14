@@ -11,6 +11,18 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'm.media-amazon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'fakestoreapi.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.builder.io',
+      },
     ],
   },
 };

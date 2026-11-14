@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import RatingBar from "../productlist/RatingBar";
@@ -40,6 +40,12 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   } = useContext(GlobalContext) ?? {};
 
   const { id, title, price, description, image, rating, category } = product;
+  const [mainImgSrc, setMainImgSrc] = useState(image);
+
+  useEffect(() => {
+    setMainImgSrc(image);
+  }, [image]);
+
   const isWishlisted = wishlist.some((item) => item.id === id);
 
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
@@ -103,11 +109,12 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
                   className="relative w-20 h-20 sm:w-24 sm:h-24 bg-neutral-100 rounded-lg p-2 border border-gray-200 shrink-0 cursor-pointer hover:border-black transition-colors"
                 >
                   <Image
-                    src={image}
+                    src={mainImgSrc || image || "https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg"}
                     alt={`${title} thumbnail ${idx + 1}`}
                     fill
                     sizes="96px"
                     className="object-contain p-2"
+                    onError={() => setMainImgSrc("https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg")}
                   />
                 </div>
               ))}
@@ -116,12 +123,13 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
             <div className="relative flex-1 bg-neutral-100 rounded-lg min-h-[380px] sm:min-h-[480px] p-8 flex items-center justify-center">
               <div className="relative w-full h-[320px] sm:h-[400px]">
                 <Image
-                  src={image}
+                  src={mainImgSrc || image || "https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg"}
                   alt={title}
                   fill
                   priority
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-contain"
+                  onError={() => setMainImgSrc("https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg")}
                 />
               </div>
             </div>

@@ -58,7 +58,7 @@ const OrderSummary: React.FC = () => {
                 <div className="relative w-12 h-12 bg-white rounded p-1 border border-gray-200 shrink-0">
                   {item.image && (
                     <Image
-                      src={item.image}
+                      src={item.image || "https://m.media-amazon.com/images/I/81fPKd-2AYL._AC_SL1500_.jpg"}
                       alt={item.title}
                       fill
                       sizes="48px"
