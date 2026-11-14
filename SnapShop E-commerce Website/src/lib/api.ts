@@ -124,18 +124,26 @@ export const FALLBACK_PRODUCTS: ApiProduct[] = [
 
 const BASE_URL = "https://fakestoreapi.com";
 
+const FETCH_HEADERS = {
+  "User-Agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+  Accept: "application/json",
+};
+
 export async function getProducts(): Promise<ApiProduct[]> {
   try {
     const res = await fetch(`${BASE_URL}/products`, {
+      headers: FETCH_HEADERS,
       next: { revalidate: 3600 }, // ISR cache for 1 hour
     });
     if (!res.ok) {
-      throw new Error(`Failed to fetch products: ${res.statusText}`);
+      console.warn(`[API] Fakestore API returned status ${res.status}. Using fallback products.`);
+      return FALLBACK_PRODUCTS;
     }
     const data = await res.json();
     return Array.isArray(data) && data.length > 0 ? data : FALLBACK_PRODUCTS;
   } catch (err) {
-    console.error("Error fetching products, using fallback data:", err);
+    console.warn("[API] Unable to reach fakestoreapi during build. Using fallback products.");
     return FALLBACK_PRODUCTS;
   }
 }
@@ -143,6 +151,7 @@ export async function getProducts(): Promise<ApiProduct[]> {
 export async function getProductById(id: string | number): Promise<ApiProduct | null> {
   try {
     const res = await fetch(`${BASE_URL}/products/${id}`, {
+      headers: FETCH_HEADERS,
       next: { revalidate: 3600 },
     });
     if (!res.ok) {
@@ -151,7 +160,6 @@ export async function getProductById(id: string | number): Promise<ApiProduct | 
     }
     return res.json();
   } catch (err) {
-    console.error(`Error fetching product ${id}, checking fallback:`, err);
     const fallback = FALLBACK_PRODUCTS.find((p) => p.id === Number(id));
     return fallback || null;
   }
@@ -160,6 +168,7 @@ export async function getProductById(id: string | number): Promise<ApiProduct | 
 export async function getCategories(): Promise<string[]> {
   try {
     const res = await fetch(`${BASE_URL}/products/categories`, {
+      headers: FETCH_HEADERS,
       next: { revalidate: 86400 },
     });
     if (!res.ok) {
@@ -170,7 +179,6 @@ export async function getCategories(): Promise<string[]> {
       ? data
       : ["electronics", "jewelery", "men's clothing", "women's clothing"];
   } catch (err) {
-    console.error("Error fetching categories:", err);
     return ["electronics", "jewelery", "men's clothing", "women's clothing"];
   }
 }
