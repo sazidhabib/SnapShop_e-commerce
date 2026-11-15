@@ -28,3 +28,14 @@ dist-ssr
 out/
 next-env.d.ts
 *.tsbuildinfo
+
+# AI & Editor configs
+.agents/
+.cursor/
+.jetro/
+.github/copilot-instructions.md
+.mcp.json
+.windsurfrules
+AGENT.md
+CLAUDE.md
+
